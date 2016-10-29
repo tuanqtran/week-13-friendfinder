@@ -11,8 +11,8 @@
 	body{
 		background-image: url("./images/cork-wallet.png");
 	}
-</style>
- --><body>
+</style> -->
+<body style="background-image: url('/images/cork-wallet.png')">
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-12">
@@ -33,8 +33,8 @@
 			    </div>
 		    	<div class="col-lg-12">
 			        <div class="form-group">
-			            <label for="photoImage"><h4>Link to Photo Image (Optional)</h4></label>
-			            <input type="text" class="form-control" id="photoImage">
+			            <label for="photoImage"><h4>Link to Photo Image (Required)</h4></label>
+			            <input type="text" class="form-control" id="photoImage" required>
 			        </div>
 		        </div>
 
@@ -200,20 +200,42 @@
 		};
 		console.log(userInfo);
 
+		$.get('/api/friends', function(req, res){
+			var match;
+			var potentialMatch = 0;
+			var index = 0;
+			function diffArray(){
+				var difference = [];
+				for(var j=0; j<req.length; j++){
+					for(var i=0; i<userInfo.score.length; i++){
+						potentialMatch += Math.abs(userInfo.score[i] - req[j].score[i]);
+					}
+					difference.push(potentialMatch);
+					console.log(difference);
+					match = Math.min.apply(Math, difference);
 
+					console.log("This is the lowest value: " + match);
+					potentialMatch = 0;
+				}
 
-		var currentURL = window.location.origin;
-		$.post(currentURL + "/api/friends", userInfo)
+				var index = difference.indexOf(match);
+				$('#userMatch').html(req[index].name);
+				$('#userPhoto').html('<img style="width:400px; height; 400px;"src="'+ req[index].photo + '" >');
 
-		$.post(currentURL + "/survey", userInfo)
-			.done(function(data){
-				// $('#userMatch').html("hey");
-				// $('#userPhoto').html("https://www.newton.ac.uk/files/covers/968361.jpg");
+				if($('.form-group .form-control') == ""){
+					alert("Please try again.");
+				}else{
+					$('#myModal').modal('show'); 
+				}				
+			}
+			diffArray();
+		});
 
-				$('#myModal').modal('show'); 
-			})
+		$.post('/api/friends', userInfo, function(req, res){
+			console.log(req);
 
-		// $('#myModal').modal('show'); 
+		});
+
 
 		return false;
 	});
