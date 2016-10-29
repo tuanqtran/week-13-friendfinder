@@ -12,6 +12,7 @@
 		background-image: url("./images/cork-wallet.png");
 	}
 </style> -->
+<!-- <body> -->
 <body style="background-image: url('./images/cork-wallet.png')">
 	<div class="container">
 		<div class="row">
@@ -199,6 +200,8 @@
 			score: answerArray
 		};
 		console.log(userInfo);
+		$.post('/api/friends', userInfo, function(req, res){
+		});
 
 		$.get('/api/friends', function(req, res){
 			var match;
@@ -206,7 +209,7 @@
 			var index = 0;
 			function diffArray(){
 				var difference = [];
-				for(var j=0; j<req.length; j++){
+				for(var j=0; j<req.length - 1; j++){
 					for(var i=0; i<userInfo.score.length; i++){
 						potentialMatch += Math.abs(userInfo.score[i] - req[j].score[i]);
 					}
@@ -235,9 +238,6 @@
 			diffArray();
 		});
 
-		$.post('/api/friends', userInfo, function(req, res){
-
-		});
 
 
 		return false;
