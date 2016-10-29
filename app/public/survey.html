@@ -12,7 +12,7 @@
 		background-image: url("./images/cork-wallet.png");
 	}
 </style> -->
-<body style="background-image: url('/images/cork-wallet.png')">
+<body style="background-image: url('./images/cork-wallet.png')">
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-12">
@@ -222,17 +222,20 @@
 				$('#userMatch').html(req[index].name);
 				$('#userPhoto').html('<img style="width:400px; height; 400px;"src="'+ req[index].photo + '" >');
 
-				if($('.form-group .form-control') == ""){
-					alert("Please try again.");
-				}else{
-					$('#myModal').modal('show'); 
-				}				
+				$('.form-group .form-control').each(function(){
+					if($(this).val() == ''){
+						console.log("Please fill in the requirements.")
+					}else{
+						$('#myModal').modal('show'); 
+					}
+				});
+			
+					// $('#myModal').modal('show'); 
 			}
 			diffArray();
 		});
 
 		$.post('/api/friends', userInfo, function(req, res){
-			console.log(req);
 
 		});
 
